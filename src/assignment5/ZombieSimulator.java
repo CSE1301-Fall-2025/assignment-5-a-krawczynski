@@ -31,11 +31,19 @@ public class ZombieSimulator {
 	 * Read entities from a file.
 	 */
 	public static void readEntities(Scanner in, boolean[] areZombies, double[][] positions) {
-
-		// TODO: Implement this function 
-		// (you can probably adjust code from Assignment 4)
-
+		int i = 0; // index for arrays
 		
+		while (in.hasNext()) {
+        	String type = in.next();        // read token (Zombie or Human)
+        	double x = in.nextDouble();     // read x-coordinate
+        	double y = in.nextDouble();     // read y-coordinate
+
+        	positions[i][X] = x;
+        	positions[i][Y] = y;
+        	areZombies[i] = Objects.equals(type, ZOMBIE_TOKEN_VALUE);
+
+        i++;
+    	}
 	}
 
 	/**
@@ -48,16 +56,34 @@ public class ZombieSimulator {
 	 * @param positions  the (x,y) position of each entity
 	 */
 	public static void drawEntities(boolean[] areZombies, double[][] positions) {
+	
 		// DONE: Clear the frame
 		StdDraw.clear();
+	
+		// Loop through all entities
+    	for (int i = 0; i < positions.length; i++) {
+        	double x = positions[i][X];
+        	double y = positions[i][Y];
 
-		// TODO: Write the loop that displays all the entities 
-		// (you can probably adjust code from Assignment 4)
+        	if (areZombies[i]) {
+            	StdDraw.setPenColor(ZOMBIE_COLOR);
+        	} else {
+            	StdDraw.setPenColor(NONZOMBIE_COLOR);
+    		}
 
-		
+        	// Draw filled circle at entity position
+        	StdDraw.filledCircle(x, y, ENTITY_RADIUS);
+    	}
 
-		// DONE: Show everything that was drawn (show the updated frame). This should be
-		// the only "show()" command!
+    // Optional: display number of non-zombies
+    int nonZombieCount = 0;
+    for (boolean isZombie : areZombies) {
+        if (!isZombie) nonZombieCount++;
+    }
+    StdDraw.setPenColor(TEXT_COLOR);
+    StdDraw.text(0.1, 0.95, "Non-zombies: " + nonZombieCount); // top-left corner
+
+    // Show the frame
 		StdDraw.show();
 	}
 
